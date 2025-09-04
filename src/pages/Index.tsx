@@ -1,6 +1,7 @@
 import { ImageProcessor } from '@/components/ImageProcessor';
 import { PrivacyBanner } from '@/components/PrivacyBanner';
-import { Palette, Sparkles } from 'lucide-react';
+import { Palette, Sparkles, Github, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 const Index = () => {
@@ -42,8 +43,36 @@ const Index = () => {
 
           {/* Footer */}
           <footer className="border-t mt-16 py-8">
-            <div className="container mx-auto px-4 text-center text-muted-foreground">
-              <p>✨ All processing happens in your browser - no uploads, maximum privacy ✨</p>
+            <div className="container mx-auto px-4">
+              {/* Privacy Message */}
+              <div className="text-center text-muted-foreground mb-6">
+                <p>✨ All processing happens in your browser - no uploads, maximum privacy ✨</p>
+              </div>
+              
+              {/* Open Source Section */}
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 mb-4">
+  
+                  <span className="text-sm text-muted-foreground">
+                    Open source  Built by <span className="font-medium text-foreground">rickvian</span>
+                  </span>
+      
+                </div>
+                
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-background hover:bg-muted"
+                    onClick={() => window.open('https://github.com/rickvian/bravepinkherogreenduotone', '_blank')}
+                  >
+                    <Github className="h-4 w-4 mr-2" />
+                    View Source Code
+                  </Button>
+                </div>
+                
+
+              </div>
             </div>
           </footer>
         </> : (
