@@ -1,8 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Upload, Download, Palette, X, ChevronUp, ChevronDown } from 'lucide-react';
+import { Upload, Download, Palette, X, ChevronUp, ChevronDown, Repeat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 
 interface ImageProcessorProps {
@@ -21,6 +22,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
   const [contrast, setContrast] = useState([100]);
   const [brightness, setBrightness] = useState([100]);
   const [controlsExpanded, setControlsExpanded] = useState(false);
+  const [colorsFlipped, setColorsFlipped] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -110,19 +112,19 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
         
         // Define more saturated duotone colors
         // Hero Green - deeper, more saturated
-        const greenR = 15;
-        const greenG = 85;
-        const greenB = 45;
+        const color1R = colorsFlipped ? 255 : 15;
+        const color1G = colorsFlipped ? 95 : 85;
+        const color1B = colorsFlipped ? 200 : 45;
         
         // Brave Pink - more vibrant
-        const pinkR = 255;
-        const pinkG = 95;
-        const pinkB = 200;
+        const color2R = colorsFlipped ? 15 : 255;
+        const color2G = colorsFlipped ? 85 : 95;
+        const color2B = colorsFlipped ? 45 : 200;
         
         // Enhanced color mixing with individual saturation control
-        const duotoneR = Math.round(greenR + (pinkR - greenR) * blendRatio);
-        const duotoneG = Math.round(greenG + (pinkG - greenG) * blendRatio);
-        const duotoneB = Math.round(greenB + (pinkB - greenB) * blendRatio);
+        const duotoneR = Math.round(color1R + (color2R - color1R) * blendRatio);
+        const duotoneG = Math.round(color1G + (color2G - color1G) * blendRatio);
+        const duotoneB = Math.round(color1B + (color2B - color1B) * blendRatio);
         
         // Apply individual saturation based on which color dominates
         let finalR, finalG, finalB;
@@ -161,7 +163,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
     } finally {
       setProcessing(false);
     }
-  }, [pinkIntensity, greenIntensity, contrast, brightness]);
+  }, [pinkIntensity, greenIntensity, contrast, brightness, colorsFlipped]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -368,6 +370,26 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
             }`}
           >
             <div className="p-6 space-y-6 pb-10">
+              {/* Color Flip Toggle */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-white flex items-center gap-2">
+                    <Repeat className="h-4 w-4" />
+                    {colorsFlipped ? "Green & Pink" : "Pink & Green"}
+                  </label>
+                  <Switch
+                    checked={colorsFlipped}
+                    onCheckedChange={(checked) => {
+                      setColorsFlipped(checked);
+                      if (currentFile) {
+                        processImage(currentFile);
+                      }
+                    }}
+                    className="data-[state=checked]:bg-pink-500"
+                  />
+                </div>
+              </div>
+
               {/* Sliders */}
               <div className="space-y-6">
                 <div>
