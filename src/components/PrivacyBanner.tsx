@@ -5,17 +5,17 @@ export const PrivacyBanner = () => {
   return (
     <Card className="bg-gradient-secondary text-secondary-foreground p-6 mb-8">
       <div className="flex items-center justify-center gap-8 text-center">
-        <div className="flex items-center gap-2">
-          <Cpu className="h-5 w-5" />
-          <span className="text-sm font-medium">100% Browser Processing</span>
+        <div className="flex items-center gap-2 flex-col">
+          <Cpu className="h-10 w-10" />
+          <span className="text-sm font-medium text-sm">100% Browser Processing</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Shield className="h-5 w-5" />
-          <span className="text-sm font-medium">No Uploads</span>
+        <div className="flex items-center gap-2 flex-col">
+          <Shield className="h-10 w-10" />
+          <span className="text-sm font-medium text-sm">No Uploads</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Lock className="h-5 w-5" />
-          <span className="text-sm font-medium">Your Privacy Protected</span>
+        <div className="flex items-center gap-2 flex-col">
+          <Lock className="h-10 w-10" />
+          <span className="text-sm font-medium text-sm">Your Privacy Protected</span>
         </div>
       </div>
     </Card>

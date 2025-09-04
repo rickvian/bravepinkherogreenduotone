@@ -156,7 +156,6 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
       
       onImageProcessed(imageUrlWithHash);
       
-
     } catch (error) {
       toast("Failed to process image. Please try again.");
     } finally {
@@ -200,11 +199,8 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
     processImage(file);
   };
 
-
-
   // Debounced auto-apply when sliders change
   useEffect(() => {
-
     if (!currentFile) {
       return;
     }
@@ -260,6 +256,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
         {/* Drop Zone - Only show when no image */}
         {!processedImageUrl && (
           <Card 
+            data-testid="drop-zone"
             className={`border-2 border-dashed transition-all duration-300 ${
               dragActive 
                 ? 'border-primary bg-primary/5 shadow-glow' 
@@ -286,6 +283,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
                 ref={fileInputRef}
                 type="file"
                 className="hidden"
+                data-testid="file-input"
                 accept="image/jpeg,image/png,image/webp"
                 onChange={(e) => handleFile(e.target.files?.[0]!)}
               />
@@ -300,7 +298,6 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-gray-900">
       {/* Background Image */}
- 
       {processedImageUrl && (
         <img 
           src={processedImageUrl}
@@ -329,116 +326,117 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
       
       {/* Close Button */}
       <Button
+        data-testid="clear-button"
         onClick={clearImage}
         variant="outline"
         size="sm"
-        className="absolute top-4 right-4 z-50 bg-black/20 backdrop-blur-sm border-white/20 text-white hover:bg-black/40"
+        className="fixed top-4 right-4 z-50 bg-black/20 backdrop-blur-sm border-white/20 text-white hover:bg-black/40"
       >
         <X className="h-4 w-4" />
       </Button>
 
-            {/* Collapsible Controls Overlay */}
-      <div className="absolute inset-0 flex flex-col items-center">
-        {/* Controls Panel with Glass Effect */}
-        <div 
-          className={`transition-all duration-300 bg-black/20 backdrop-blur-lg border-t border-white/10 absolute w-full max-w-[400px] bottom-[74px] ${
-            controlsExpanded ? 'flex-1' : 'flex-none'
-          }`
-        } 
-          data-testid="control-panel"
-        >
-          <div>
-            {/* Toggle Header */}
-            <button
-              onClick={() => setControlsExpanded(!controlsExpanded)}
-              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/10 transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
-                <span className="font-medium">Adjust Colors</span>
-              </div>
-              {controlsExpanded ? (
-                <ChevronDown className="h-5 w-5" />
-              ) : (
-                <ChevronUp className="h-5 w-5" />
-              )}
-            </button>
+      {/* Controls Panel with Glass Effect */}
+      <div 
+        className={`fixed left-1/2 -translate-x-1/2 transition-all duration-300 bg-black/20 backdrop-blur-lg border-t border-white/10 w-full max-w-[400px] bottom-[74px] ${
+          controlsExpanded ? 'flex-1' : 'flex-none'
+        }`}
+        data-testid="control-panel"
+      >
+        <div>
+          {/* Toggle Header */}
+          <button
+            data-testid="controls-toggle"
+            onClick={() => setControlsExpanded(!controlsExpanded)}
+            className="w-full p-4 flex items-center justify-between text-white hover:bg-white/10 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              <span className="font-medium">Adjust Colors</span>
+            </div>
+            {controlsExpanded ? (
+              <ChevronDown className="h-5 w-5" />
+            ) : (
+              <ChevronUp className="h-5 w-5" />
+            )}
+          </button>
 
-            {/* Expandable Content */}
-            <div 
-              className={`overflow-hidden transition-all duration-300 ${
-                controlsExpanded ? 'opacity-100' : 'max-h-0 opacity-0'
-              }`}
-            >
-              <div className="p-6 space-y-6 pb-10">
-                {/* Sliders */}
-                <div className="space-y-6">
-                  <div>
-                    <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
-                      <span className="flex items-center gap-2">
-                        <Palette className="h-4 w-4 text-pink-300" />
-                        Pink Intensity
-                      </span>
-                      <span className="text-pink-300 font-bold">{pinkIntensity[0]}%</span>
-                    </label>
-                    <Slider
-                      value={pinkIntensity}
-                      onValueChange={setPinkIntensity}
-                      max={100}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
-                      <span className="flex items-center gap-2">
-                        <Palette className="h-4 w-4 text-green-300" />
-                        Green Intensity
-                      </span>
-                      <span className="text-green-300 font-bold">{greenIntensity[0]}%</span>
-                    </label>
-                    <Slider
-                      value={greenIntensity}
-                      onValueChange={setGreenIntensity}
-                      max={100}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
-                      <span>Contrast</span>
-                      <span className="text-white font-bold">{contrast[0]}%</span>
-                    </label>
-                    <Slider
-                      value={contrast}
-                      onValueChange={setContrast}
-                      min={50}
-                      max={150}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
-                      <span>Brightness</span>
-                      <span className="text-white font-bold">{brightness[0]}%</span>
-                    </label>
-                    <Slider
-                      value={brightness}
-                      onValueChange={setBrightness}
-                      min={50}
-                      max={150}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
+          {/* Expandable Content */}
+          <div 
+            data-testid="controls-content"
+            className={`overflow-hidden transition-all duration-300 ${
+              controlsExpanded ? 'opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <div className="p-6 space-y-6 pb-10">
+              {/* Sliders */}
+              <div className="space-y-6">
+                <div>
+                  <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
+                    <span className="flex items-center gap-2">
+                      <Palette className="h-4 w-4 text-pink-300" />
+                      Pink Intensity
+                    </span>
+                    <span className="text-pink-300 font-bold">{pinkIntensity[0]}%</span>
+                  </label>
+                  <Slider
+                    data-testid="pink-slider"
+                    value={pinkIntensity}
+                    onValueChange={setPinkIntensity}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
                 </div>
                 
-
+                <div>
+                  <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
+                    <span className="flex items-center gap-2">
+                      <Palette className="h-4 w-4 text-green-300" />
+                      Green Intensity
+                    </span>
+                    <span className="text-green-300 font-bold">{greenIntensity[0]}%</span>
+                  </label>
+                  <Slider
+                    data-testid="green-slider"
+                    value={greenIntensity}
+                    onValueChange={setGreenIntensity}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
+                    <span>Contrast</span>
+                    <span className="text-white font-bold">{contrast[0]}%</span>
+                  </label>
+                  <Slider
+                    data-testid="contrast-slider"
+                    value={contrast}
+                    onValueChange={setContrast}
+                    min={50}
+                    max={150}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
+                    <span>Brightness</span>
+                    <span className="text-white font-bold">{brightness[0]}%</span>
+                  </label>
+                  <Slider
+                    data-testid="brightness-slider"
+                    value={brightness}
+                    onValueChange={setBrightness}
+                    min={50}
+                    max={150}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -446,7 +444,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
       </div>
 
       {/* Fixed Bottom Action Buttons */}
-      <div data-testid="floating-button-container" className="absolute bottom-0 left-0 right-0 p-4 bg-black/30 backdrop-blur-sm border-t border-white/10">
+      <div data-testid="floating-button-container" className="fixed bottom-0 left-0 right-0 p-4 bg-black/30 backdrop-blur-sm border-t border-white/10">
         <div className="flex gap-3">
           <Button
             onClick={() => fileInputRef.current?.click()}
@@ -457,6 +455,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
             New Image
           </Button>
           <Button
+            data-testid="download-button"
             onClick={downloadImage}
             disabled={!processedImageUrl || processing}
             className="flex-1 bg-gradient-primary hover:shadow-glow"
