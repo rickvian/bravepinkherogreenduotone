@@ -395,10 +395,10 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
                 <div>
                   <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
                     <span className="flex items-center gap-2">
-                      <Palette className="h-4 w-4 text-pink-300" />
-                      Pink Intensity
+                      <Palette className={`h-4 w-4 ${colorsFlipped ? "text-green-300" : "text-pink-300"}`} />
+                      {colorsFlipped ? "Green" : "Pink"} Intensity
                     </span>
-                    <span className="text-pink-300 font-bold">{pinkIntensity[0]}%</span>
+                    <span className={`font-bold ${colorsFlipped ? "text-green-300" : "text-pink-300"}`}>{pinkIntensity[0]}%</span>
                   </label>
                   <Slider
                     data-testid="pink-slider"
@@ -413,10 +413,10 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
                 <div>
                   <label className="text-sm font-medium text-white flex items-center justify-between mb-3">
                     <span className="flex items-center gap-2">
-                      <Palette className="h-4 w-4 text-green-300" />
-                      Green Intensity
+                      <Palette className={`h-4 w-4 ${colorsFlipped ? "text-pink-300" : "text-green-300"}`} />
+                      {colorsFlipped ? "Pink" : "Green"} Intensity
                     </span>
-                    <span className="text-green-300 font-bold">{greenIntensity[0]}%</span>
+                    <span className={`font-bold ${colorsFlipped ? "text-pink-300" : "text-green-300"}`}>{greenIntensity[0]}%</span>
                   </label>
                   <Slider
                     data-testid="green-slider"
