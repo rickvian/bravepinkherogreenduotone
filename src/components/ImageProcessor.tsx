@@ -31,7 +31,6 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
     contrast?: number;
     brightness?: number;
   }) => {
-    console.log('processImage called')
     const finalSettings = {
       pinkIntensity: settings?.pinkIntensity ?? pinkIntensity[0],
       greenIntensity: settings?.greenIntensity ?? greenIntensity[0],
@@ -206,9 +205,7 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
   // Debounced auto-apply when sliders change
   useEffect(() => {
 
-    console.log('efffect called')
     if (!currentFile) {
-      console.log('no current file, returning')
       return;
     }
 
@@ -219,7 +216,6 @@ export const ImageProcessor = ({ processedImageUrl, onImageProcessed, currentFil
 
     // Set new timeout for auto-apply
     debounceRef.current = setTimeout(() => {
-      console.log('debounced')
       processImage(currentFile, {
         pinkIntensity: pinkIntensity[0],
         greenIntensity: greenIntensity[0],

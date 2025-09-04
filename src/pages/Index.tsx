@@ -52,7 +52,6 @@ const Index = () => {
             processedImageUrl={processedImageUrl}
             onImageProcessed={(imageUrl)=>{
               setProcessedImageUrl(imageUrl)
-              console.log('imageUrl', imageUrl)
             }}
             currentFile={currentFile}
             onFileChange={setCurrentFile}
